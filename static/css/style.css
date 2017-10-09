@@ -1,0 +1,13 @@
+/*@import "compass/css3";*/
+
+canvas {
+  z-index: -100
+}
+
+p {
+  color:white !important;
+  z-index: 100;
+  text-align: center;
+  font-size: 30px
+
+}

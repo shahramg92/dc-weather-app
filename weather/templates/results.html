@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<p>The current weather for {{response.name}} is: </p>
+<p>Temperature: {{ response.main.temp }} &#8457;</p>
+<p>{{ response.weather[0].main }}</p>
+<p>{{ response.weather[0].main }}</p>
+<p>{{ response.weather[0].main }}</p>
+<p>{{ response.weather[0].main }}</p>
+<p>{{ response.weather[0].main }}</p>
+<p>{{ response.weather[0].main }}</p>
+<p>{{ response.weather[0].main }}</p>
+<p>Cloudy?: {{ response.weather[0].description }}</p>
+{% endblock %}

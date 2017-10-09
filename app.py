@@ -3,7 +3,7 @@ import os
 import tornado.ioloop
 import tornado.web
 import tornado.log
-
+import json
 import requests
 
 from jinja2 import \
@@ -21,20 +21,41 @@ class TemplateHandler(tornado.web.RequestHandler):
 
 class MainHandler(TemplateHandler):
   def get (self):
-    # render input form
-    balogna
+    self.set_header('Cache-Control',
+     'no-store, no-cache, must-revalidate, max-age=0')
+    self.render_template("index.html", {})
 
   def post (self):
-    pass
-    # get city name
+    cityname = self.get_body_argument('cityname')
+    url = "http://api.openweathermap.org/data/2.5/weather"
+    querystring = {"q":"Houston","APIKEY":"2e32ce8e4192c1446ca78334f23e1ecb","units":"imperial"}
+    headers = {
+        'cache-control': "no-cache",
+        'postman-token': "16ca84d0-4102-9b21-8f21-a9acd570d842"
+        }
+    response = requests.request("GET", url, headers=headers, params=querystring)
+    print(response.text)
+    response = json.loads(response.text)
 
+    # print(json.loads(response.text))
+    self.render_template('results.html', {'response': response})
     # lookup the weather
 
+
+
     # render the weather data
+
+class ResultsHandler(TemplateHandler):
+    def get(self):
+        self.render_template("results.html", {})
+
+
+
 
 def make_app():
   return tornado.web.Application([
     (r"/", MainHandler),
+    (r"/", ResultsHandler),
     (r"/static/(.*)",
       tornado.web.StaticFileHandler, {'path': 'static'}),
   ], autoreload=True)
