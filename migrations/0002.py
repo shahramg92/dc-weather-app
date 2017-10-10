@@ -1,7 +1,7 @@
 import sys
-
 import models
 import peewee
+
 from playhouse.migrate import migrate, PostgresqlMigrator
 
 def forward ():
@@ -28,4 +28,3 @@ if __name__ == '__main__':
 
   else:
     forward()
-    

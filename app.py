@@ -30,19 +30,25 @@ class MainHandler(TemplateHandler):
 
   def post (self):
     cityname = self.get_body_argument('cityname')
-    timestamp = self.get_body_argument('timestamp')
     url = "http://api.openweathermap.org/data/2.5/weather"
     querystring = {"q": cityname,"APIKEY":"2e32ce8e4192c1446ca78334f23e1ecb","units":"imperial"}
     headers = {
         'cache-control': "no-cache",
         'postman-token': "16ca84d0-4102-9b21-8f21-a9acd570d842"
         }
-    response = requests.request("GET", url, headers=headers, params=querystring)
+    response = requests.request("POST", url, headers=headers, params=querystring)
     print(response.text)
     response = json.loads(response.text)
 
-    weather_table.create(cityname=cityname, stampcreated= stampcreated, weatherdata=response.json())
+    weathertable.create(
+    cityname=cityname,
+    weatherdata=response.json()
+    )
+
+
+
     # print(response)
+
 
 #or you could do this for convenience (refer below)
     # clouds = response.text.weather[0].temp
