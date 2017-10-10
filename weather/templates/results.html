@@ -5,10 +5,8 @@
 <p>Temperature: {{ response.main.temp }} &#8457;</p>
 <p>Min Temperature: {{ response.main.temp_min }} &#8457;</p>
 <p>Max Temperature: {{ response.main.temp_max }} &#8457;</p>
+<p>Humidity: {{  response.main.humidity  }} %</p>
 <p>Clouds: {{ response.weather[0].main }} </p>
 <p>Wind Speed: {{ response.wind.speed }} MPH</p>
-<p>Wind Gusts: {{ response.wind.gust }} MPH</p>
-<p>Sunrise: {{ response.sys.sunrise }}</p>
-<p>Sunset: {{ response.sys.sunset }}</p>
 <p>Country: {{ response.sys.country }}</p>
 {% endblock %}
