@@ -42,12 +42,9 @@ class MainHandler(TemplateHandler):
 
     weathertable.create(
     cityname=cityname,
-    weatherdata=response.json()
+    weatherdata=json.dumps(response)
     )
 
-
-
-    # print(response)
 
 
 #or you could do this for convenience (refer below)

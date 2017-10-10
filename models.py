@@ -4,6 +4,11 @@ import peewee
 import sys
 from playhouse.db_url import connect
 from playhouse.postgres_ext import JSONField
+from geoip import open_database
+
+match = geolite2.lookup('17.0.0.1')
+match is not None
+
 
 
 DB = connect(
