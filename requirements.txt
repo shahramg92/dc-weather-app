@@ -3,3 +3,4 @@ Jinja2==2.9.6
 boto3
 python-dotenv
 requests
+peewee
