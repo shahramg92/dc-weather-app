@@ -7,7 +7,7 @@ import json
 import requests
 import datetime
 
-from models import weather_table
+from models import weathertable
 
 from jinja2 import \
   Environment, PackageLoader, select_autoescape
