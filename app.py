@@ -5,6 +5,7 @@ import tornado.web
 import tornado.log
 import json
 import requests
+import datetime
 
 from jinja2 import \
   Environment, PackageLoader, select_autoescape
@@ -28,7 +29,7 @@ class MainHandler(TemplateHandler):
   def post (self):
     cityname = self.get_body_argument('cityname')
     url = "http://api.openweathermap.org/data/2.5/weather"
-    querystring = {"q":"Houston","APIKEY":"2e32ce8e4192c1446ca78334f23e1ecb","units":"imperial"}
+    querystring = {"q": cityname,"APIKEY":"2e32ce8e4192c1446ca78334f23e1ecb","units":"imperial"}
     headers = {
         'cache-control': "no-cache",
         'postman-token': "16ca84d0-4102-9b21-8f21-a9acd570d842"
@@ -36,10 +37,17 @@ class MainHandler(TemplateHandler):
     response = requests.request("GET", url, headers=headers, params=querystring)
     print(response.text)
     response = json.loads(response.text)
-
+    # print(response)
+    # response.sys.sunrise = datetime.datetime.utcfromtimestamp(response.sys.sunrise)
+    # response.sys.sunset = datetime.datetime.utcfromtimestamp(response.sys.sunset)
+#or you could do this for convenience (refer below)
+    # clouds = response.text.weather[0].temp
+    # temp = response.text.weather[0].temp
     # print(json.loads(response.text))
     self.render_template('results.html', {'response': response})
-    # lookup the weather
+
+#or you could do this for convenience
+#  self.render_template('results.html', {'clouds' : clouds, 'temp': temp })
 
 
 
@@ -48,8 +56,6 @@ class MainHandler(TemplateHandler):
 class ResultsHandler(TemplateHandler):
     def get(self):
         self.render_template("results.html", {})
-
-
 
 
 def make_app():

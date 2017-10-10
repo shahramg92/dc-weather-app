@@ -11,3 +11,14 @@ p {
   font-size: 30px
 
 }
+
+h1 {
+  text-align: center;
+  color: white !important;
+}
+
+form {
+  justify-content: center;
+  color: white;
+
+}
