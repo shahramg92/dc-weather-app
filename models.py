@@ -3,7 +3,7 @@ import os
 import peewee
 import sys
 from playhouse.db_url import connect
-
+from playhouse.postgres_ext import JSONField
 
 DB = connect(
   os.environ.get(
@@ -19,7 +19,7 @@ class BaseModel (peewee.Model):
 class weathertable (BaseModel):
   cityname = peewee.CharField(max_length=60)
   stampcreated = peewee.CharField(max_length=60)
-  weatherdata = peewee.jsonField()
+  weatherdata = JSONField()
 
   def __str__ (self):
     return self.name
