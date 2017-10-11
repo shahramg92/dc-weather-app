@@ -22,6 +22,24 @@ class TemplateHandler(tornado.web.RequestHandler):
     template = ENV.get_template(tpl)
     self.write(template.render(**context))
 
+def retrieve_api_data(cityname):
+   url = "http://api.openweathermap.org/data/2.5/weather"
+   querystring = {"q": cityname,"APIKEY":"2e32ce8e4192c1446ca78334f23e1ecb","units":"imperial"}
+   headers = {
+        'cache-control': "no-cache",
+        'postman-token': "16ca84d0-4102-9b21-8f21-a9acd570d842"
+        }
+
+   response = requests.request("GET", url, headers=headers, params=querystring)
+   # print(response.text)
+
+   weatherdata = weathertable.create(
+   cityname=cityname,
+   weatherdata=response.json()
+    )
+   # print('api_call',type(weatherdata))
+   return weatherdata
+
 
 class MainHandler(TemplateHandler):
   def get (self):
@@ -31,34 +49,44 @@ class MainHandler(TemplateHandler):
 
 
   def post (self):
-    # what's the IP address?
+
     cityname = self.get_body_argument('cityname')
     cityname = cityname.title()
     old = datetime.datetime.utcnow() - datetime.timedelta(minutes=15)
-    print(cityname)
-
+    # print(cityname)
     try:
         weather = weathertable.select().where(weathertable.cityname == cityname).where(weathertable.stampcreated >= old).get()
-        print(weather)
+        # print('try block', weather, type(weather))
 
     except:
-        import traceback
-        traceback.print_exc()
-        url = "http://api.openweathermap.org/data/2.5/weather"
-        querystring = {"q": cityname,"APIKEY":"2e32ce8e4192c1446ca78334f23e1ecb","units":"imperial"}
-        headers = {
-            'cache-control': "no-cache",
-            'postman-token': "16ca84d0-4102-9b21-8f21-a9acd570d842"
-            }
-        response = requests.request("GET", url, headers=headers, params=querystring)
-        print(response.text)
+        # import traceback              use import traceback to find errors
+        # traceback.print_exc()         when using try/except
+        # print('except block')
+        weather = retrieve_api_data(cityname)
+        # print(weather)
 
-        weather = weathertable.create(
-        cityname=cityname,
-        weatherdata=response.json()
-        )
+    self.render_template('results.html', {'response': weather})
 
-    self.render_template('results.html', {'response': weather.weatherdata})
+class LocationHandler (TemplateHandler):
+    def post(self):
+        x_real_ip = self.request.headers.get("X-Real-IP")
+        remote_ip = x_real_ip or self.request.remote_ip
+        url = f'http://ipinfo.io/{remote_ip}/json'
+        if remote_ip.startswith(('192.', '127.', '10.', "::1")):
+            url = 'http://ipinfo.io/json'
+
+        # print('this is your ip' + remote_ip + url)
+
+        response = requests.get(url)
+
+        data = json.loads(response.text)
+        # print('\n\n', data, '\n\n')
+        city = data['city']
+        weather = retrieve_api_data(city)
+        # print('location ', weather, type(weather))
+
+        template = ENV.get_template('results.html')
+        self.write(template.render({'response': weather}))
 
 
 class ResultsHandler(TemplateHandler):
@@ -69,7 +97,8 @@ class ResultsHandler(TemplateHandler):
 def make_app():
   return tornado.web.Application([
     (r"/", MainHandler),
-    (r"/", ResultsHandler),
+    # (r"/", ResultsHandler),
+    (r"/location", LocationHandler),
     (r"/static/(.*)",
       tornado.web.StaticFileHandler, {'path': 'static'}),
   ], autoreload=True)

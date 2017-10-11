@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+{% with response = response.weatherdata %}
 <p>The current weather for {{response.name}} is: </p>
 <p>Temperature: {{ response.main.temp }} &#8457;</p>
 <p>Min Temperature: {{ response.main.temp_min }} &#8457;</p>
@@ -10,4 +10,5 @@
 <p>Clouds: {{ response.weather[0].main }} </p>
 <p>Wind Speed: {{ response.wind.speed }} MPH</p>
 <p>Country: {{ response.sys.country }}</p>
+{% endwith %}
 {% endblock %}
