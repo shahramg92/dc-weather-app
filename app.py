@@ -49,11 +49,12 @@ class MainHandler(TemplateHandler):
 
 
   def post (self):
-
     cityname = self.get_body_argument('cityname')
     cityname = cityname.title()
+    print(cityname)
+
     old = datetime.datetime.utcnow() - datetime.timedelta(minutes=15)
-    # print(cityname)
+
     try:
         weather = weathertable.select().where(weathertable.cityname == cityname).where(weathertable.stampcreated >= old).get()
         # print('try block', weather, type(weather))
@@ -89,15 +90,9 @@ class LocationHandler (TemplateHandler):
         self.write(template.render({'response': weather}))
 
 
-class ResultsHandler(TemplateHandler):
-    def get(self):
-        self.render_template("results.html", {})
-
-
 def make_app():
   return tornado.web.Application([
     (r"/", MainHandler),
-    # (r"/", ResultsHandler),
     (r"/location", LocationHandler),
     (r"/static/(.*)",
       tornado.web.StaticFileHandler, {'path': 'static'}),
