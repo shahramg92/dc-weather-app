@@ -81,6 +81,7 @@ class LocationHandler (TemplateHandler):
         response = requests.get(url)
 
         data = json.loads(response.text)
+        print(data)
         # print('\n\n', data, '\n\n')
         city = data['city']
         weather = retrieve_api_data(city)
