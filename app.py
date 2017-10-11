@@ -78,7 +78,7 @@ class LocationHandler (TemplateHandler):
 
         # print('this is your ip' + remote_ip + url)
 
-        print(url, self.request.remote_ip, x_real_ip)
+        print(url, self.request.headers)
         response = requests.get(url)
 
         data = json.loads(response.text)
