@@ -10,7 +10,5 @@
 <p>Clouds: {{ response.weather[0].main }} </p>
 <p>Wind Speed: {{ response.wind.speed }} MPH</p>
 <p>Country: {{ response.sys.country }}</p>
-<div id="openweathermap-widget-1"></div>
-<script src='https://openweathermap.org/themes/openweathermap/assets/vendor/owm/js/d3.min.js'></script><script>window.myWidgetParam ? window.myWidgetParam : window.myWidgetParam = [];  window.myWidgetParam.push({id: 1,cityid: '4699066',appid: '2e32ce8e4192c1446ca78334f23e1ecb',units: 'imperial',containerid: 'openweathermap-widget-1',  });  (function() {var script = document.createElement('script');script.async = true;script.charset = "utf-8";script.src = "https://openweathermap.org/themes/openweathermap/assets/vendor/owm/js/weather-widget-generator.js";var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(script, s);  })();</script>
 {% endwith %}
 {% endblock %}
